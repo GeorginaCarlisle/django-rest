@@ -15,7 +15,7 @@ class ProfileList(APIView):
         get method used to handle HTTP GET request for this view
         """
         profiles = Profile.objects.all()
-        serializer = ProfileSerializer(profiles, many=True)
+        serializer = ProfileSerializer(profiles, many=True, context={'request': request})
         # Above creates a new instance of the serializer of the profiles
         # Many=True needed to specify we're serializing multiple Profile instances
         return Response(serializer.data)
@@ -46,7 +46,7 @@ class ProfileDetail(APIView):
         get method used to handle HTTP GET request for a specified profile
         """
         profile = self.get_object(pk)
-        serializer = ProfileSerializer(profile)
+        serializer = ProfileSerializer(profile, context={'request': request})
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -57,7 +57,7 @@ class ProfileDetail(APIView):
         Here the request.data is .....
         """
         profile = self.get_object(pk)
-        serializer = ProfileSerializer(profile, data=request.data)
+        serializer = ProfileSerializer(profile, data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
