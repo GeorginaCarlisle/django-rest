@@ -4,6 +4,7 @@ from .models import Profile
 
 class ProfileSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
+    # Above overwrites owner to be username and not id (as it is in profile model)
 
     class Meta:
         """
