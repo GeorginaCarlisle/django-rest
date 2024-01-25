@@ -14,9 +14,9 @@ from pathlib import Path
 import os
 
 if os.path.exists('env.py'):
-    import env
+    import env as env
 
-cloudinary_storage = {
+CLOUDINARY_STORAGE = {
     'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')
 }
 
@@ -50,7 +50,6 @@ INSTALLED_APPS = [
     'cloudinary_storage',
     'django.contrib.staticfiles',
     'cloudinary',
-
     'profiles',
 ]
 
