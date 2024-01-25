@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Profile
 from .serializers import ProfileSerializer
+from drf_api.permissions import IsOwnerOrReadOnly
 
 class ProfileList(APIView):
     """
@@ -26,6 +27,7 @@ class ProfileDetail(APIView):
     serializer_class = ProfileSerializer
     # Above explicitly sets the serializer_class attribute so framework automatically renders a form
     # which is based on the fields defined within the ProfileSerializer
+    permission_classes = [IsOwnerOrReadOnly]
     def get_object(self, pk):
         """
         get_object method used to retrieve a specific object based on
@@ -34,6 +36,7 @@ class ProfileDetail(APIView):
         """
         try:
             profile = Profile.objects.get(pk=pk)
+            self.check_object_permissions(self.request, profile)
             return profile
         except Profile.DoesNotExist:
             raise Http404
