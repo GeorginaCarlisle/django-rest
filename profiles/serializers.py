@@ -6,6 +6,7 @@ class ProfileSerializer(serializers.ModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
     # Above overwrites owner to be username and not id (as it is in profile model)
     is_owner = serializers.SerializerMethodField()
+    # Above adds an extra field that is nopt part of the database
 
     def get_is_owner(self, obj):
         request = self.context['request']

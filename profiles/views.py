@@ -28,6 +28,8 @@ class ProfileDetail(APIView):
     # Above explicitly sets the serializer_class attribute so framework automatically renders a form
     # which is based on the fields defined within the ProfileSerializer
     permission_classes = [IsOwnerOrReadOnly]
+    # Above defines the permissions to be used as part of this view. 
+    # These are then called on check_object_permissions
     def get_object(self, pk):
         """
         get_object method used to retrieve a specific object based on
@@ -37,6 +39,8 @@ class ProfileDetail(APIView):
         try:
             profile = Profile.objects.get(pk=pk)
             self.check_object_permissions(self.request, profile)
+            # Above is a DRF method which checks if the user associated with the request 
+            # has permission to perform the specified action on the given object
             return profile
         except Profile.DoesNotExist:
             raise Http404
