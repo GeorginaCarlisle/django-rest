@@ -3,12 +3,20 @@ from rest_framework.views import APIView
 from .models import Post
 from .serializers import PostSerializer
 from rest_framework.response import Response
+from rest_framework import status, permissions
 
 
 class PostList(APIView):
     """
     View to return a list of all posts
     """
+    serializer_class = PostSerializer
+    # The above renders a form to the admin interface for creating a new post
+    permission_classes = [
+        permissions.IsAuthenticatedOrReadOnly
+    ]
+    #IsAuthenticatedOrReadOnly is a built in permission that only allows readonly requests unless logged in
+
     def get(self, request):
         """
         get method used to handle HTTP GET request for this view
@@ -17,10 +25,15 @@ class PostList(APIView):
         serializer = PostSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data)
 
-    def post():
+    def post(self, request):
         """
         post method used to handle HTTP POST request for this view
         """
+        serializer = PostSerializer(data=request.data, context={'request': request})
+        if serializer.is_valid():
+            serializer.save(owner=request.user)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class PostDetail(APIView):
     """
