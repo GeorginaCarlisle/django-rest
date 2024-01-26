@@ -78,7 +78,12 @@ class PostDetail(APIView):
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-    def delete(self, request):
+    def delete(self, request, pk):
         """
         delete method used to handle HTTP DELETE request for this view
         """
+        post = self.get_object(pk)
+        post.delete()
+        return Response(
+            status=status.HTTP_204_NO_CONTENT
+        )
