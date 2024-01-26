@@ -1,9 +1,10 @@
-from django.shortcuts import render
+from django.http import Http404
 from rest_framework.views import APIView
 from .models import Post
 from .serializers import PostSerializer
 from rest_framework.response import Response
 from rest_framework import status, permissions
+from drf_api.permissions import IsOwnerOrReadOnly
 
 
 class PostList(APIView):
@@ -41,10 +42,31 @@ class PostDetail(APIView):
     """
     serializer_class = PostSerializer
 
-    def get(self, request):
+    permission_classes = [IsOwnerOrReadOnly]
+
+    def get_object(self, pk):
         """
-        get method used to handle HTTP GET request for this view
+        Gets requested post. Checking permissions first and
+        raising an error if the post doesn't exist or permission is not met.
         """
+        try:
+            post = Post.objects.get(pk=pk)
+            self.check_object_permissions(self.request, post)
+            # Above is a DRF method which checks if the user associated with the request 
+            # has permission to perform the specified action on the given object
+            return post
+        except Post.DoesNotExist:
+            raise Http404
+
+    def get(self, request, pk):
+        """
+        get method used to send requested post back.
+        """
+        post = self.get_object(pk)
+        # Above calls the get_object method defined above
+        serializer = PostSerializer(post, context={'request': request})
+        return Response(serializer.data)
+
     def put(self, request):
         """
         put method used to handle HTTP PUT request for this view and update a post
