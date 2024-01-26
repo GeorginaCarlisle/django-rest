@@ -6,6 +6,7 @@ from .models import Profile
 from .serializers import ProfileSerializer
 from drf_api.permissions import IsOwnerOrReadOnly
 
+
 class ProfileList(APIView):
     """
     View to return a list of all profiles
@@ -19,6 +20,7 @@ class ProfileList(APIView):
         # Above creates a new instance of the serializer of the profiles
         # Many=True needed to specify we're serializing multiple Profile instances
         return Response(serializer.data)
+
 
 class ProfileDetail(APIView):
     """
