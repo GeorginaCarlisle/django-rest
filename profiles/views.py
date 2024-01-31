@@ -13,6 +13,9 @@ class ProfileList(generics.ListAPIView):
     serializer_class = ProfileSerializer
     queryset = Profile.objects.annotate(
         posts_count=Count('owner__post', distinct=True),
+        # the above is counting the number of links (through foreign keys, one-to-many relationships etc.) between owner of the profile and post instances across the DB.
+        # the __ denotes that the relationship is across more than one table jump
+        # distinct=True makes sure that only unique pairs are counted (important as there may be multiple paths between related pairs)
         followers_count=Count('owner__followed', distinct=True),
         following_count=Count('owner__following', distinct=True),
     ).order_by('-created_at')
