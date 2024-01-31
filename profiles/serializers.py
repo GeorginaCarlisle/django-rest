@@ -10,6 +10,10 @@ class ProfileSerializer(serializers.ModelSerializer):
     # Above adds a new field with the SerializerMethodField allowing definition of a 
     # custom method ('get_is_owner) to determine the value of the field.
     following_id = serializers.SerializerMethodField()
+    # The fields below are created during the view
+    posts_count = serializers.ReadOnlyField()
+    followers_count = serializers.ReadOnlyField()
+    following_count = serializers.ReadOnlyField()
 
     def get_is_owner(self, obj):
         """
@@ -39,4 +43,5 @@ class ProfileSerializer(serializers.ModelSerializer):
         fields = [
             'id', 'owner', 'created_at', 'updated_at', 'name',
             'content', 'image', 'is_owner', 'following_id',
+            'posts_count', 'followers_count', 'following_count',
         ]
