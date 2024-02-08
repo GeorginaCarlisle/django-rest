@@ -1,4 +1,5 @@
 from rest_framework import generics, permissions
+from django_filters.rest_framework import DjangoFilterBackend
 from drf_api.permissions import IsOwnerOrReadOnly
 from .models import Comment
 from .serializers import CommentSerializer, CommentDetailSerializer
@@ -13,6 +14,13 @@ class CommentList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Comment.objects.all()
     # Above queryset is used to define which records need pulling from the DB
+    filter_backends = [
+        DjangoFilterBackend,
+    ]
+    filterset_fields = [
+        'post'
+        # Above retrieves all the comments associated with a given post.
+    ]
 
     def perform_create(self, serializer):
         """
