@@ -64,7 +64,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'localhost',
-    'https://walk-through-django-rest-a5d1529cfa3a.herokuapp.com/',
+    'walk-through-django-rest-a5d1529cfa3a.herokuapp.com',
     '127.0.0.1']
 
 # Application definition
